@@ -12,6 +12,7 @@
                         <h3>
                             Title: {{ $post->title }}
                         </h3>
+                        @if ($post->category) {{ $post->category->name }} @else Uncategorized @endif
                         <div class="actions d-flex">
                             <a class="btn btn-primary " href="{{ route('admin.posts.show', $post->slug) }}">Show</a>
                             <a class="btn btn-success mx-3" href="{{ route('admin.posts.edit', $post->slug) }}">Modify</a>

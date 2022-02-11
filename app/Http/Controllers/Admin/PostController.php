@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -27,7 +28,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -38,15 +40,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate(
-            [
-                'title' => 'required|max:255',
-            ],
-            [
-                'required' => 'The :attribute is a required filed!',
-                'max' => 'Max :max characters allowes for the :attribute',
-            ]
-        );
+        $data = $request->all();
         $newPost = new Post();
 
         $slug = Str::slug($data['title'], '-');
@@ -56,8 +50,8 @@ class PostController extends Controller
             $count++;
         }
         $data['slug'] = $slug;
-        $newPost->title = $data['title'];
         $newPost->slug = $data['slug'];
+        $newPost->fill($data);
         $newPost->save();
         return redirect()->route('admin.posts.show', $newPost->slug);
     }
@@ -83,7 +77,11 @@ class PostController extends Controller
     public function edit($slug)
     {
         $post = Post::where('slug', $slug)->first();
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+        if (!$post) {
+            abort(404);
+        }
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**

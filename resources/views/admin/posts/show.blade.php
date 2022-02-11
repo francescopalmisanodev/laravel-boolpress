@@ -8,6 +8,13 @@
             <h1>
                 Title: {{ $post->title }}
             </h1>
+            <span>
+                <strong>Category</strong>
+                @if ($post->category)
+                    {{ $post->category->name }}
+                @else Uncategorized
+                @endif
+            </span>
             <div class="actions w-25 d-flex justify-content-between">
                 <a class="btn btn-success" href="{{ route('admin.posts.edit', $post->slug) }}">Modify</a>
                 <form action="{{ route('admin.posts.destroy', $post->slug) }}" method="post">
