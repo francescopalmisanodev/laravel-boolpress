@@ -16,6 +16,17 @@
                     </option>
                 @endforeach
             </select>
+
+            <div class="form-label mt-4">Tags</div>
+            @foreach ($tags as $tag)
+                <span class="form-label mr-3">
+                    <input type="checkbox" name="tags[]" id="tag{{ $loop->iteration }}" value="{{ $tag->id }}"
+                        @if ($errors->any() && in_array($tag->id, old('tags', []))) checked 
+                            @elseif(!$errors->any() && $post->tags->contains($tag->id))
+                            checked @endif>
+                    <label for="tag{{ $loop->iteration }}">{{ $tag->name }}</label>
+                </span>
+            @endforeach
             <button class="mt-4 w-25 btn btn-primary" type="submit">
                 Modifica il Post
             </button>

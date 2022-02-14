@@ -12,7 +12,9 @@
                         <h3>
                             Title: {{ $post->title }}
                         </h3>
-                        @if ($post->category) {{ $post->category->name }} @else Uncategorized @endif
+                        @if ($post->category)
+                        {{ $post->category->name }} @else Uncategorized
+                        @endif
                         <div class="actions d-flex">
                             <a class="btn btn-primary " href="{{ route('admin.posts.show', $post->slug) }}">Show</a>
                             <a class="btn btn-success mx-3" href="{{ route('admin.posts.edit', $post->slug) }}">Modify</a>
@@ -26,4 +28,20 @@
                 @endforeach
             </div>
         </div>
-    @endsection
+        <section>
+            <h2>Posts by Tag</h2>
+            @foreach ($tags as $tag)
+                <h4>{{ $tag->name }}</h4>
+                @if ($tag->posts->isEmpty())
+                    <p>No posts for this tag</p>
+                @else
+                    <ul>
+                        @foreach ($tag->posts as $post)
+                            <li><a href="{{ route('admin.posts.show', $post->id) }}">{{ $post->title }}</a></li>
+                        @endforeach
+                    </ul>
+                @endif
+            @endforeach
+        </section>
+    </div>
+@endsection

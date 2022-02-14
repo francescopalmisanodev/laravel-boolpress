@@ -15,6 +15,15 @@
                 @else Uncategorized
                 @endif
             </span>
+            @if (!$post->tags->isEmpty())
+                <h3>Tags</h3>
+                @foreach ($post->tags as $tag)
+                    <span class="badge badge-primary">{{ $tag->name }}</span>
+                @endforeach
+            @else
+                <p>No Tags for this post </p>
+            @endif
+
             <div class="actions w-25 d-flex justify-content-between">
                 <a class="btn btn-success" href="{{ route('admin.posts.edit', $post->slug) }}">Modify</a>
                 <form action="{{ route('admin.posts.destroy', $post->slug) }}" method="post">
